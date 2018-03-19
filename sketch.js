@@ -20,7 +20,7 @@ var state;
 var HKNova;
 
 function preload() {
-  HKNova = loadFont('assets/HKNovaSB.otf');
+  HKNova = loadFont('HKNovaSB.otf');
 }
 
 function refresh() {
