@@ -9,7 +9,7 @@ function intro(tempX, tempY) {
   fill(0, 0, 100);
   textSize(8);
   text("U S E    I N    F U L L S C R E E N    F O R    B E S T    R E S U L T S", 0, height/-4);
-  text("D E M O    V E R S I O N    2 . 2", 0, height/-4 - 12);
+  text("D E M O    V E R S I O N    2 . 3", 0, height/-4 - 12);
   translate(0, height/4);
   rectMode(CENTER);
   rect(0, 0, 275, 30, 30);
@@ -83,7 +83,7 @@ function instructions() {
     push();
     noFill();
     stroke(0, 0, 100);
-    rect(0, -height/100, width/2.5, height/2.5, height/50);
+    rect(0, -height/100, 560 - 1400*30/width, height/2.5, height/50);
     pop();
     volFeedback(0, 0);
   } else if (state == 2) {
@@ -94,7 +94,7 @@ function instructions() {
     push();
     noFill();
     stroke(0, 0, 100);
-    rect(0, -height/100, width/2.5, height/2.5, height/50);
+    rect(0, -height/100, 560 - 1400*30/width, height/2.5, height/50);
     pop();
   } else if (state == 3) {
     push();
