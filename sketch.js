@@ -21,7 +21,7 @@ var state;
 var HKNova;
 
 function preload() {
-  HKNova = loadFont('assets/HKNovaSB.otf');
+  HKNova = loadFont('../phonetic-typography/HKNovaSB.otf');
 }
 
 function refresh() {
