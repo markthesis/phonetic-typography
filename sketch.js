@@ -1,5 +1,6 @@
 /*
 created by Mark Chan (@markcwy // markcwy.com)
+with the help of many many tutorial videos by Daniel Shiffman (The Coding Train)
 if using any part of this code for your own work,
 please don't forget to give credit! Thanks!!
 */
@@ -20,7 +21,7 @@ var state;
 var HKNova;
 
 function preload() {
-  HKNova = loadFont('../phonetic-typography/HKNovaSB.otf');
+  HKNova = loadFont('assets/HKNovaSB.otf');
 }
 
 function refresh() {
@@ -28,10 +29,7 @@ function refresh() {
   recSwitch = false;
   volArray = [];
   freqArray = [];
-  volHistory = [];
-  for (var i = 0; i < 16; i++) {
-    volHistory[i] = 0;
-  }
+  volHistory = zeroArray(16);
   state = 0;
   size = 3;
   tracking = 12*size;
@@ -125,15 +123,19 @@ function draw() {
 
 function keyPressed() {
   if (key == ' ') {
-    if (state >= 0 && state < 4) {
+    if (state >= 0 && state < 1) {
       state ++;
-    } else {
+    } else if (state >= 2 && state < 4){
+      state ++;
+    } else if (state == 4) {
       state = 0;
     }
 
     if (state == 1) {
       speechRefresh();
-      recSwitch = !recSwitch;
+      if (!recSwitch) {
+        recSwitch = !recSwitch;
+      }
     } else if (state == 3) {
       genSwitch = !genSwitch;
     } else if (state == 4) {
@@ -177,8 +179,8 @@ function avgFreqValues() {
   //find out how many values of frequency are mapped to a single letter
   subSet = round(freqArray.length/sentence.length);
 
-  //creates a new array with at sentence.length with 0s;
-  avgFreqArray = zeroArray();
+  //creates a new array at sentence.length with 0s;
+  avgFreqArray = zeroArray(sentence.length);
 
   // for every element of avgFreqArray
   for (var j = 0; j < sentence.length; j++) {
@@ -211,7 +213,7 @@ function avgVolValues() {
   startPos = 0;
   subSet = round(volArray.length/sentence.length);
 
-  avgVolArray = zeroArray();
+  avgVolArray = zeroArray(sentence.length);
 
   for (var j = 0; j < sentence.length; j++) {
 
@@ -234,10 +236,10 @@ function avgVolValues() {
   console.log("vol:" + avgVolArray);
 }
 
-function zeroArray() {
+function zeroArray(arrayLength) {
   //creates array of zeros with sentence.length;
-  emptyArray = new Array(sentence.length);
-  for (var i = 0; i < sentence.length; i ++) {
+  emptyArray = new Array(arrayLength);
+  for (var i = 0; i < arrayLength; i ++) {
     emptyArray[i] = 0;
   }
   return emptyArray;
