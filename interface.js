@@ -9,9 +9,8 @@ function intro(tempX, tempY) {
   fill(0, 0, 100);
   textSize(8);
   text("U S E    I N    F U L L S C R E E N    F O R    B E S T    R E S U L T S", 0, height/-4);
-  text("D E M O    V E R S I O N    2 . 3", 0, height/-4 - 12);
+  text("D E M O    V E R S I O N    2 . 3 . 1", 0, height/-4 - 12);
   translate(0, height/4);
-  rectMode(CENTER);
   rect(0, 0, 275, 30, 30);
 
   fill(0, 0, 0);
@@ -111,9 +110,7 @@ function instructions() {
   } else if (state == 3) {
     push();
     translate(0, height/4);
-    rectMode(CENTER);
     rect(0, 0, 295, 30, 30);
-
     fill(0, 0, 0);
     textSize(10);
     text("H I T   T H E   S P A C E B A R   T O   R E S T A R T", -12, 4);
