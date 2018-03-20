@@ -67,6 +67,17 @@ function arrow(tempX, tempY, tempSize) {
   pop();
 }
 
+function checkmark(tempX, tempY) {
+  push();
+  translate(tempX, tempY);
+  rectMode(CORNER);
+  stroke(0, 0, 100);
+  strokeWeight(8);
+  line(-75, 0, -25, 50);
+  line(-25, 50, 75, -50);
+  pop();
+}
+
 function instructions() {
   push();
   translate(width/2, height/2);
@@ -95,6 +106,7 @@ function instructions() {
     noFill();
     stroke(0, 0, 100);
     rect(0, -height/100, 560 - 1400*30/width, height/2.5, height/50);
+    checkmark(0, 0);
     pop();
   } else if (state == 3) {
     push();
