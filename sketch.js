@@ -15,7 +15,7 @@ var freqArray, volArray;
 var avgFreqArray, avgVolArray;
 var volHistory;
 //switches
-var genSwitch, recSwitch;
+var genSwitch, recSwitch, startRecSwitch, voiceListen;
 //misc
 var state;
 var HKNova;
@@ -27,6 +27,8 @@ function preload() {
 function refresh() {
   genSwitch = false;
   recSwitch = false;
+  startRecSwitch = false;
+  voiceListen = false;
   volArray = [];
   freqArray = [];
   volHistory = zeroArray(16);
@@ -56,6 +58,7 @@ function setup() {
 }
 
 function draw() {
+  console.log(state);
   push();
 
   if (state == 0) {
@@ -72,15 +75,19 @@ function draw() {
       var fOutput = map(f10 + f11, 0, 50, minF, maxF);
       var volOutput = map(vol, 0, 50, minV, maxV);
 
-      if (talk.resultValue==true) {
-        sentence = talk.resultString;
-        console.log(sentence);
-        if (state == 1) {
-          state++;
+
+      if (voiceListen) {
+        if (talk.resultValue==true && !startRecSwitch) {
+          sentence = talk.resultString;
+          console.log(sentence);
+          if (state == 2) {
+            state++;
+          }
         }
       }
 
-      if (mouseIsPressed){
+      if (startRecSwitch) {
+
         if (fOutput > 0 && volOutput > 0) {
           freqArray.push(constrain(fOutput, maxF, minF));
           volArray.push(constrain(volOutput, minV, maxV));
@@ -97,6 +104,7 @@ function draw() {
         }
 
       }
+
     }
 
     if (genSwitch){
@@ -121,28 +129,34 @@ function draw() {
 
 }
 
+function mousePressed() {
+  if (state >= 0 && state < 2) {
+    state ++;
+  } else if (state >= 3 && state < 5){
+    state ++;
+  } else if (state == 5) {
+    state = 0;
+  }
+
+  if (state == 2) {
+    if (!recSwitch) {
+      recSwitch = !recSwitch;
+    }
+  } else if (state == 4) {
+    genSwitch = !genSwitch;
+  } else if (state == 5) {
+    refresh();
+    speechRefresh();
+  }
+}
+
 function keyPressed() {
-  if (key == ' ') {
-    if (state >= 0 && state < 1) {
-      state ++;
-    } else if (state >= 2 && state < 4){
-      state ++;
-    } else if (state == 4) {
-      state = 0;
-    }
-
-    if (state == 1) {
-      speechRefresh();
-      if (!recSwitch) {
-        recSwitch = !recSwitch;
-      }
-    } else if (state == 3) {
-      genSwitch = !genSwitch;
-    } else if (state == 4) {
-      refresh();
-      speechRefresh();
-    }
-
+  if (state == 2 && key == ' ' && !startRecSwitch) {
+    speechRefresh();
+    voiceListen = !voiceListen;
+    startRecSwitch = !startRecSwitch;
+  } else if (state == 2 && key == ' ' && startRecSwitch) {
+    startRecSwitch = !startRecSwitch;
   } else if (key == '0') {
     volArray = [];
     freqArray = [];
