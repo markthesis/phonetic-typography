@@ -10,7 +10,7 @@ function intro(tempX, tempY) {
   textSize(8);
   text("A N D   I N   F U L L S C R E E N    F O R    B E S T    R E S U L T S", 0, height/-4);
   text("U S E    I N    A   Q U I E T   L O C A T I O N", 0, height/-4 - 15);
-  text("D E M O    V E R S I O N    3 . 0", 0, height/-4 - 30);
+  text("D E M O    V E R S I O N    3 . 1", 0, height/-4 - 30);
   translate(0, height/4);
   rect(0, 0, 180, 30, 30);
 
@@ -30,8 +30,6 @@ function intro(tempX, tempY) {
   var waveSize = 3*size;
   var speed = 2;
   var weightChange = 0.7;
-  var subtracking = tracking*1.02;
-  var subwaveWeight = 0.7*size;
 
   P(0, 0, waveWeight - weightChange*cos(speed*frameCount), sin(speed*frameCount)*waveHeight+waveSize);
   H(2*tracking, 0, waveWeight - weightChange*cos(speed*frameCount-30), sin(speed*frameCount-30)*waveHeight+waveSize);
@@ -42,8 +40,10 @@ function intro(tempX, tempY) {
   I(11.5*tracking, 0, waveWeight - weightChange*cos(speed*frameCount-180), sin(speed*frameCount-180)*waveHeight+waveSize);
   C(13*tracking, 0, waveWeight - weightChange*cos(speed*frameCount-210), sin(speed*frameCount-210)*waveHeight+waveSize);
 
-  scale(0.73);
-  translate(-0.3*tracking, 115);
+  size = 2.2;
+  var subtracking = 12.2*size
+  var subwaveWeight = 0.7*size;
+  translate(-0.3*tracking, 83);
 
   T(0, 0, subwaveWeight, 0.05*size);
   Y(2*subtracking, 0, subwaveWeight, 0.05*size);
@@ -58,6 +58,7 @@ function intro(tempX, tempY) {
   pop();
 
   pop();
+  size = 3;
 }
 
 function arrow(tempX, tempY, tempSize) {
@@ -153,12 +154,12 @@ function volFeedback(x, y) {
   var tempS = 2;
   translate(5*tempS * (volHistory.length-1), 0);
 
-  if (startRecSwitch) {
+  if (recSwitch) {
     fill(0, 100, 100, abs(sin(frameCount*3)));
     ellipse(102 - 700*30/width, -height/5 + 20, 20, 20);
     fill(0, 0, 100);
     for (var i = 0; i < volHistory.length; i++) {
-      rect(i * -10*tempS, 0, 4*tempS, 13*tempS + volHistory[i]*3*tempS, 4*tempS);
+      rect(i * -10*tempS, 0, 4*tempS, 4*tempS + volHistory[i]*3*tempS, 4*tempS);
     }
   } else {
     fill(0, 0, 20);
