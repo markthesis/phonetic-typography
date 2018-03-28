@@ -11,11 +11,12 @@ var xPos, yPos, xMargin, xBreak;
 //sound inputs
 var talk, mic, freq;
 var minF, maxF, minV, maxV;
-var freqArray, volArray;
+var freqArray = [];
+var volArray = [];
 var avgFreqArray, avgVolArray;
 var volHistory;
 //switches
-var genSwitch, recSwitch, startRecSwitch, voiceListen;
+var recSwitch, voiceListen;
 //misc
 var state;
 var HKNova;
@@ -25,12 +26,8 @@ function preload() {
 }
 
 function refresh() {
-  genSwitch = false;
   recSwitch = false;
-  startRecSwitch = false;
   voiceListen = false;
-  volArray = [];
-  freqArray = [];
   volHistory = zeroArray(16);
   state = 0;
   size = 3;
@@ -38,13 +35,15 @@ function refresh() {
 }
 
 function speechRefresh() {
+  volArray = [];
+  freqArray = [];
   talk = new p5.SpeechRec();
   talk.start();
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  colorMode(HSB, 360, 100, 100, 1);
+  colorMode(HSB, 360, 100, 100);
   angleMode(DEGREES);
   rectMode(CENTER)
   textAlign(CENTER);
@@ -58,65 +57,63 @@ function setup() {
 }
 
 function draw() {
-  console.log(state);
-  push();
 
+  push();
   if (state == 0) {
     intro(width/2, height/2);
-  } else {
+  } else if (state >= 2 && state <= 3) {
 
-    if (recSwitch) {
-      background(0, 0, 0);
-      textStyling();
-      var spectrum = freq.analyze(16);
-      var f10 = map(spectrum[9], 0, 255, 0, 25);
-      var f11 = map(spectrum[10], 0, 255, 0, 25);
-      var vol = map(mic.getLevel()*1000, 0, 400, 0, 50);
-      var fOutput = map(f10 + f11, 0, 50, minF, maxF);
-      var volOutput = map(vol, 0, 50, minV, maxV);
+    background(0, 0, 0);
+    minF = size;
+    maxF = -1*size;
+    minV = -1.5*size;
+    maxV = 5*size;
+    var spectrum = freq.analyze(16);
+    var f10 = map(spectrum[9], 0, 255, 0, 25);
+    var f11 = map(spectrum[10], 0, 255, 0, 25);
+    var vol = map(mic.getLevel()*1000, 0, 400, 0, 50);
+    var fOutput = map(f10 + f11, 0, 50, minF, maxF);
+    var volOutput = map(vol, 0, 50, minV, maxV);
+    console.log(vol);
 
-
-      if (voiceListen) {
-        if (talk.resultValue==true && !startRecSwitch) {
-          sentence = talk.resultString;
-          console.log(sentence);
-          if (state == 2) {
-            state++;
-          }
+    if (voiceListen) {
+      if (talk.resultValue==true && !recSwitch) {
+        sentence = talk.resultString;
+        console.log(sentence);
+        if (state == 2) {
+          state++;
         }
       }
+    }
 
-      if (startRecSwitch) {
+    if (recSwitch) {
 
-        if (fOutput > 0 && volOutput > 0) {
-          freqArray.push(constrain(fOutput, maxF, minF));
-          volArray.push(constrain(volOutput, minV, maxV));
-          console.log(freqArray);
-          console.log(volArray);
-        }
+      if (vol > 10) {
+        freqArray.push(constrain(fOutput, maxF, minF));
+        volArray.push(constrain(volOutput, minV, maxV));
+        // console.log(freqArray);
+        // console.log(volArray);
+      }
 
-        //display the little sound wave thing
-        if (!genSwitch) {
-          volHistory.push(constrain(volOutput, minV, maxV));
-          if (volHistory.length > 15) {
-            volHistory.splice(0, 1);
-          }
-        }
-
+      volHistory.push(constrain(volOutput, 0, maxV));
+      if (volHistory.length > 15) {
+        volHistory.splice(0, 1);
       }
 
     }
 
-    if (genSwitch){
-      avgFreqValues();
-      avgVolValues();
-      for (var i = 0; i < sentence.length; i++) {
-        variableType(sentence.substring(i, i + 1), avgFreqArray[i], avgVolArray[i]);
-        if (xPos > (4/5)*windowWidth + 2.5*tracking) {
-          xBreak = xPos;
-          yPos += 65*size;
-          xPos = 0;
-        }
+  } else if (state == 4) {
+
+    background(0, 0, 0);
+    textStyling();
+    avgFreqValues();
+    avgVolValues();
+    for (var i = 0; i < sentence.length; i++) {
+      variableType(sentence.substring(i, i + 1), avgFreqArray[i], avgVolArray[i]);
+      if (xPos > (4/5)*windowWidth + 2.5*tracking) {
+        xBreak = xPos;
+        yPos += 65*size;
+        xPos = 0;
       }
     }
   }
@@ -134,32 +131,24 @@ function mousePressed() {
     state ++;
   } else if (state >= 3 && state < 5){
     state ++;
-  } else if (state == 5) {
-    state = 0;
   }
 
-  if (state == 2) {
-    if (!recSwitch) {
-      recSwitch = !recSwitch;
-    }
-  } else if (state == 4) {
-    genSwitch = !genSwitch;
-  } else if (state == 5) {
+  if (state == 5) {
+    state = 0;
     refresh();
     speechRefresh();
   }
+
 }
 
 function keyPressed() {
-  if (state == 2 && key == ' ' && !startRecSwitch) {
+  if (state == 2 && key == ' ' && !recSwitch) {
     speechRefresh();
     voiceListen = !voiceListen;
-    startRecSwitch = !startRecSwitch;
-  } else if (state == 2 && key == ' ' && startRecSwitch) {
-    startRecSwitch = !startRecSwitch;
+    recSwitch = !recSwitch;
+  } else if (state == 2 && key == ' ' && recSwitch) {
+    recSwitch = !recSwitch;
   } else if (key == '0') {
-    volArray = [];
-    freqArray = [];
     speechRefresh();
   }
   return false;
@@ -178,10 +167,6 @@ function textStyling() {
   xPos = 0;
   yPos = 0;
   xBreak = 0;
-  minF = size;
-  maxF = -2*size;
-  minV = -1*size;
-  maxV = 5*size;
 
   fill(0, 0, 100);
   noStroke();
@@ -211,8 +196,7 @@ function avgFreqValues() {
       //skip to the next subSet of freqArray
       startPos += subSet;
 
-    }
-    else {
+    } else {
       //for the remainder of the array that doesn't = subSet
       for (var k = startPos; k < freqArray.length; k++) {
         avgFreqArray[j] += (freqArray[k])/(freqArray.length - startPos);
@@ -251,7 +235,6 @@ function avgVolValues() {
 }
 
 function zeroArray(arrayLength) {
-  //creates array of zeros with sentence.length;
   emptyArray = new Array(arrayLength);
   for (var i = 0; i < arrayLength; i ++) {
     emptyArray[i] = 0;
