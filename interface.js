@@ -1,28 +1,22 @@
 function intro(tempX, tempY) {
   push();
-
   translate(tempX, tempY);
   background(0, 0, 0);
   noStroke();
   //subtitle
   push();
+  textSize(9);
+  fill(0, 0, 40);
+  text("D E M O    V E R S I O N    3 . 2", 0, height/-4 - 15);
   fill(0, 0, 100);
-  textSize(8);
-  text("A N D   I N   F U L L S C R E E N    F O R    B E S T    R E S U L T S", 0, height/-4);
-  text("U S E    I N    A   Q U I E T   L O C A T I O N", 0, height/-4 - 15);
-  text("D E M O    V E R S I O N    3 . 1", 0, height/-4 - 30);
-  translate(0, height/4);
-  rect(0, 0, 180, 30, 30);
-
-  fill(0, 0, 0);
-  textSize(10);
-  text("C L I C K   T O   B E G I N", -10, 4);
-  arrow(75 + 1.2*sin(6*frameCount), 0, 5);
+  text("U S E   I N   F U L L S C R E E N    F O R    B E S T    R E S U L T S", 0, height/-4);
+  UIbutton("C L I C K   T O   B E G I N", 190, 0, height/4);
   pop();
 
   push();
   scale(height/900);
   fill(0, 0, 100);
+  tracking = 12*size;
   translate(-6.5*tracking, 22*size);
 
   var waveHeight = 0.75*size;
@@ -61,6 +55,18 @@ function intro(tempX, tempY) {
   size = 3;
 }
 
+function UIbutton(words, buttonWidth, tempX, tempY) {
+  push();
+  translate(tempX, tempY);
+  fill(0, 0, 100);
+  rect(0, 0, buttonWidth, 30, 30);
+  fill(0, 0, 0);
+  textSize(button);
+  text(words, -12, 4);
+  arrow(buttonWidth/2 - 15 + 1.2*sin(6*frameCount), 0, 5);
+  pop();
+}
+
 function arrow(tempX, tempY, tempSize) {
   push();
   translate(tempX, tempY);
@@ -87,28 +93,22 @@ function instructions() {
 
   if (state == 1) {
     background(0, 0, 0);
-    textSize(10);
-    text("L E T T I N G   W O R D S", 0, height/-4);
-    text("S P E A K   F O R   T H E M S E L V E S", 0, height/-4 + 15);
-    textSize(15);
+    textSize(h1);
+    text("L E T T I N G   W O R D S", 0, height/-4 - 10);
+    text("S P E A K   F O R   T H E M S E L V E S", 0, height/-4 + 10);
+    textSize(body);
     text("This project aims to give typography\nthe ability to convey tonality of speech.", 0, -100)
     text("A lot of meaning is lost when we type out\nwhat we're saying into letters on a screen\nbecause these characters fail to convey\nhow we are saying them.", 0, -40);
     text("This program takes both what you say\nand how you say it, and translates that\ninto unique letterforms, allowing you to\nsee how a sentence is being said.", 0, 60);
     push();
     stroke(0, 0, 100);
     line(-50, height/-4 + 50, 50, height/-4 + 50);
-    translate(0, height/4);
-    noStroke();
-    rect(0, 0, 205, 30, 30);
-    fill(0, 0, 0);
-    textSize(10);
-    text("C L I C K   T O   C O N T I N U E", -11, 4);
-    arrow(88 + 1.2*sin(6*frameCount), 0, 5);
+    UIbutton("C L I C K   T O   C O N T I N U E", 230, 0, height/4);
     pop();
   } else if (state == 2) {
-    textSize(10);
+    textSize(h1);
     text("B E G I N    S P E E C H    T O    T Y P E    C O N V E R S I O N", 0, height/-4);
-    textSize(15);
+    textSize(body);
     text("Hit the spacebar to start and stop recording.", 0, height/4);
     push();
     noFill();
@@ -117,35 +117,27 @@ function instructions() {
     pop();
     volFeedback(0, 0);
   } else if (state == 3) {
-    textSize(10);
+    textSize(h1);
     text("S P E E C H    P R O C E S S E D", 0, height/-4);
-    textSize(15);
     push();
     noFill();
     stroke(0, 0, 100);
     rect(0, -height/100, 560 - 1400*30/width, height/2.5, height/50);
     checkmark(0, 0);
-    translate(0, height/4);
-    noStroke();
-    fill(0, 0, 100);
-    rect(0, 0, 205, 30, 30);
-    fill(0, 0, 0);
-    textSize(10);
-    text("C L I C K   T O   C O N T I N U E", -11, 4);
-    arrow(88 + 1.2*sin(6*frameCount), 0, 5);
+    UIbutton("C L I C K   T O   C O N T I N U E", 230, 0, height/4);
     pop();
   } else if (state == 4) {
-    push();
-    translate(0, height/4);
-    rect(0, 0, 195, 30, 30);
-    fill(0, 0, 0);
-    textSize(10);
-    text("C L I C K   T O   R E S T A R T", -12, 4);
-    arrow(83 + 1.2*sin(6*frameCount), 0, 5);
-    pop();
+    UIbutton("C L I C K   T O   T R Y   A G A I N", 240, 0, height/4);
   }
 
   pop();
+  textSize(9);
+  fill(0, 0, 100);
+  if (state > 0) {
+    text("P R E S S    '1'    T O    R E T U R N    T O    T H E    B E G I N N I N G", width/2, height - 60);
+  }
+  fill(0, 0, 40);
+  text("I F    S T U C K ,    R E F R E S H    T H E    P A G E    ( C M D + R )", width/2, height - 40);
 }
 
 function volFeedback(x, y) {
