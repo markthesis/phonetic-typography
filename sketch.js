@@ -7,7 +7,7 @@ please don't forget to give credit! Thanks!!
 
 //text inputs
 var sentence, size, tracking;
-var xPos, yPos, xMargin, xBreak;
+var xPos, yPos, xBreak;
 //sound inputs
 var talk, mic, freq;
 var minF, maxF, minV, maxV;
@@ -20,6 +20,10 @@ var recSwitch, voiceListen;
 //misc
 var state;
 var HKNova;
+//text sizes
+var h1 = 14;
+var body = 17;
+var button = 11;
 
 function preload() {
   HKNova = loadFont('../phonetic-typography/HKNovaSB.otf');
@@ -49,8 +53,8 @@ function setup() {
   textAlign(CENTER);
   textFont(HKNova);
   mic = new p5.AudioIn();
-  mic.start();
   freq = new p5.FFT(0.2, 16);
+  mic.start();
   freq.setInput(mic);
   refresh();
   frameRate(60);
@@ -62,19 +66,7 @@ function draw() {
   if (state == 0) {
     intro(width/2, height/2);
   } else if (state >= 2 && state <= 3) {
-
     background(0, 0, 0);
-    minF = size;
-    maxF = -1*size;
-    minV = -1.5*size;
-    maxV = 5*size;
-    var spectrum = freq.analyze(16);
-    var f10 = map(spectrum[9], 0, 255, 0, 25);
-    var f11 = map(spectrum[10], 0, 255, 0, 25);
-    var vol = map(mic.getLevel()*1000, 0, 400, 0, 50);
-    var fOutput = map(f10 + f11, 0, 50, minF, maxF);
-    var volOutput = map(vol, 0, 50, minV, maxV);
-    console.log(vol);
 
     if (voiceListen) {
       if (talk.resultValue==true && !recSwitch) {
@@ -87,6 +79,18 @@ function draw() {
     }
 
     if (recSwitch) {
+      minF = size;
+      maxF = -1*size;
+      minV = -1.5*size;
+      maxV = 5*size;
+      var spectrum = freq.analyze(16);
+      var f10 = map(spectrum[9], 0, 255, 0, 25);
+      var f11 = map(spectrum[10], 0, 255, 0, 25);
+      var vol = map(mic.getLevel()*1000, 0, 400, 0, 50);
+      // var vol = mic.getLevel();
+      var fOutput = map(f10 + f11, 0, 50, minF, maxF);
+      var volOutput = map(vol, 0, 50, minV, maxV);
+      console.log("vol: " + vol);
 
       if (vol > 10) {
         freqArray.push(constrain(fOutput, maxF, minF));
@@ -103,14 +107,13 @@ function draw() {
     }
 
   } else if (state == 4) {
-
     background(0, 0, 0);
     textStyling();
-    avgFreqValues();
-    avgVolValues();
+    avgFreqArray = avgArrayValues(freqArray, sentence.length, "freq: ");
+    avgVolArray = avgArrayValues(volArray, sentence.length, "vol: ");
     for (var i = 0; i < sentence.length; i++) {
       variableType(sentence.substring(i, i + 1), avgFreqArray[i], avgVolArray[i]);
-      if (xPos > (4/5)*windowWidth + 2.5*tracking) {
+      if (xPos > (2/3)*windowWidth + 2.5*tracking) {
         xBreak = xPos;
         yPos += 65*size;
         xPos = 0;
@@ -120,9 +123,7 @@ function draw() {
   pop();
 
   instructions();
-  textSize(8);
-  fill(0, 0, 100);
-  text("I F    S T U C K ,    R E F R E S H    T H E    P A G E    ( C M D + R )", width/2, height - 30);
+
 
 }
 
@@ -134,9 +135,9 @@ function mousePressed() {
   }
 
   if (state == 5) {
-    state = 0;
     refresh();
     speechRefresh();
+    state = 2;
   }
 
 }
@@ -150,6 +151,8 @@ function keyPressed() {
     recSwitch = !recSwitch;
   } else if (key == '0') {
     speechRefresh();
+  } else if (key == '1') {
+    state = 0;
   }
   return false;
 }
@@ -173,65 +176,38 @@ function textStyling() {
 
 }
 
-function avgFreqValues() {
+function avgArrayValues(receivedArray, tempX, label) {
   startPos = 0;
   //find out how many values of frequency are mapped to a single letter
-  subSet = round(freqArray.length/sentence.length);
+  subSet = round(receivedArray.length/tempX);
 
   //creates a new array at sentence.length with 0s;
-  avgFreqArray = zeroArray(sentence.length);
+  tempArray = zeroArray(tempX);
 
   // for every element of avgFreqArray
-  for (var j = 0; j < sentence.length; j++) {
+  for (var j = 0; j < tempX; j++) {
 
     //test to see if adding a subSet will cause it to overshoot freqArray.length
     var x = startPos + subSet;
-    if (x < freqArray.length) {
+    if (x < receivedArray.length) {
 
       //for every k elements in freqArray
       for (var k = startPos; k < (subSet*(j + 1)); k ++) {
-        avgFreqArray[j] += (freqArray[k]/subSet);
+        tempArray[j] += (receivedArray[k]/subSet);
       }
-
       //skip to the next subSet of freqArray
       startPos += subSet;
 
     } else {
+
       //for the remainder of the array that doesn't = subSet
-      for (var k = startPos; k < freqArray.length; k++) {
-        avgFreqArray[j] += (freqArray[k])/(freqArray.length - startPos);
+      for (var k = startPos; k < receivedArray.length; k++) {
+        tempArray[j] += (receivedArray[k])/(receivedArray.length - startPos);
       }
     }
   }
-
-  console.log("freq:" + avgFreqArray);
-}
-
-function avgVolValues() {
-  startPos = 0;
-  subSet = round(volArray.length/sentence.length);
-
-  avgVolArray = zeroArray(sentence.length);
-
-  for (var j = 0; j < sentence.length; j++) {
-
-    var x = startPos + subSet;
-    if (x < volArray.length) {
-
-      for (var k = startPos; k < (subSet*(j + 1)); k ++) {
-        avgVolArray[j] += (volArray[k]/subSet);
-      }
-      startPos += subSet;
-
-    } else {
-
-      for (var k = startPos; k < volArray.length; k++) {
-        avgVolArray[j] += (volArray[k])/(volArray.length - startPos);
-
-      }
-    }
-  }
-  console.log("vol:" + avgVolArray);
+  console.log(label + tempArray);
+  return tempArray;
 }
 
 function zeroArray(arrayLength) {
