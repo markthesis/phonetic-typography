@@ -3,6 +3,8 @@ created by Mark Chan (@markcwy // markcwy.com)
 with the help of many many tutorial videos by Daniel Shiffman (The Coding Train)
 if using any part of this code for your own work,
 please don't forget to give credit! Thanks!!
+
+Last update: April 20th, 2018
 */
 
 //text inputs
@@ -20,6 +22,7 @@ var recSwitch, voiceListen;
 //misc
 var state;
 var HKNova;
+var elapsedTime;
 //text sizes
 var h1 = 14;
 var body = 17;
@@ -30,6 +33,8 @@ function preload() {
 }
 
 function refresh() {
+  elapsedTime = 0;
+  currentTime = 0;
   recSwitch = false;
   voiceListen = false;
   volHistory = zeroArray(16);
@@ -61,6 +66,12 @@ function setup() {
 }
 
 function draw() {
+
+  //reset to home after period of inactivity
+  var currentTime = round((millis() - elapsedTime)/1000);
+  if (currentTime > 30) {
+    state = 0;
+  }
 
   push();
   if (state == 0) {
@@ -128,6 +139,7 @@ function draw() {
 }
 
 function mousePressed() {
+  elapsedTime = millis();
   if (state >= 0 && state < 2) {
     state ++;
   } else if (state >= 3 && state < 5){
@@ -143,6 +155,7 @@ function mousePressed() {
 }
 
 function keyPressed() {
+  elapsedTime = millis();
   if (state == 2 && key == ' ' && !recSwitch) {
     speechRefresh();
     voiceListen = !voiceListen;
