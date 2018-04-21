@@ -133,11 +133,16 @@ function instructions() {
   pop();
   textSize(9);
   fill(0, 0, 100);
-  if (state > 0) {
-    text("P R E S S    '1'    T O    R E T U R N    T O    T H E    B E G I N N I N G", width/2, height - 60);
+  if (state == 4) {
+    text("P R E S S    '2'    T O    S A V E    Y O U R    R E S U L T", width/2, height - 60);
   }
+
   fill(0, 0, 40);
-  text("I F    S T U C K ,    R E F R E S H    T H E    P A G E    ( C M D + R )", width/2, height - 40);
+  if (state == 0) {
+    text("C R E A T E D    B Y    M A R K    C H A N    / /    @ M A R K C W Y", width/2, height - 40);
+  } else if (state > 0) {
+    text("P R E S S    '1'    T O    R E T U R N    T O    T H E    B E G I N N I N G", width/2, height - 40);
+  }
 }
 
 function volFeedback(x, y) {
