@@ -3,8 +3,6 @@ created by Mark Chan (@markcwy // markcwy.com)
 with the help of many many tutorial videos by Daniel Shiffman (The Coding Train)
 if using any part of this code for your own work,
 please don't forget to give credit! Thanks!!
-
-Last update: April 20th, 2018
 */
 
 //text inputs
@@ -118,35 +116,39 @@ function draw() {
     }
 
   } else if (state == 4) {
-    background(0, 0, 0);
-    textStyling();
-    avgFreqArray = avgArrayValues(freqArray, sentence.length, "freq: ");
-    avgVolArray = avgArrayValues(volArray, sentence.length, "vol: ");
-    for (var i = 0; i < sentence.length; i++) {
-      variableType(sentence.substring(i, i + 1), avgFreqArray[i], avgVolArray[i]);
-      if (xPos > (2/3)*windowWidth + 2.5*tracking) {
-        xBreak = xPos;
-        yPos += 65*size;
-        xPos = 0;
-      }
-    }
+    endResult();
   }
   pop();
 
   instructions();
 
+  console.log(state);
 
+}
+
+function endResult() {
+  background(0, 0, 0);
+  textStyling();
+  avgFreqArray = avgArrayValues(freqArray, sentence.length, "freq: ");
+  avgVolArray = avgArrayValues(volArray, sentence.length, "vol: ");
+  for (var i = 0; i < sentence.length; i++) {
+    variableType(sentence.substring(i, i + 1), avgFreqArray[i], avgVolArray[i]);
+    if (xPos > (2/3)*windowWidth + 2.5*tracking) {
+      xBreak = xPos;
+      yPos += 65*size;
+      xPos = 0;
+    }
+  }
 }
 
 function mousePressed() {
   elapsedTime = millis();
+
   if (state >= 0 && state < 2) {
     state ++;
-  } else if (state >= 3 && state < 5){
+  } else if (state >= 3 && state < 4){
     state ++;
-  }
-
-  if (state == 5) {
+  } else {
     refresh();
     speechRefresh();
     state = 2;
@@ -162,12 +164,19 @@ function keyPressed() {
     recSwitch = !recSwitch;
   } else if (state == 2 && key == ' ' && recSwitch) {
     recSwitch = !recSwitch;
+  } else if (state == 4 && key == '2') {
+    endResult();
+    save('phonetictype.png')
   } else if (key == '0') {
     speechRefresh();
   } else if (key == '1') {
     state = 0;
   }
   return false;
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 function textStyling() {
