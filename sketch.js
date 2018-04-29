@@ -31,7 +31,6 @@ function preload() {
 }
 
 function refresh() {
-  elapsedTime = 0;
   currentTime = 0;
   recSwitch = false;
   voiceListen = false;
@@ -60,6 +59,7 @@ function setup() {
   freq.setInput(mic);
   refresh();
   state = 0;
+  elapsedTime = 0;
   frameRate(60);
 }
 
