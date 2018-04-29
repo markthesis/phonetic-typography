@@ -80,7 +80,7 @@ function draw() {
     if (voiceListen) {
       if (talk.resultValue==true && !recSwitch) {
         sentence = talk.resultString;
-        console.log(sentence);
+        // console.log(sentence);
         if (state == 2) {
           state++;
         }
@@ -99,7 +99,7 @@ function draw() {
       // var vol = mic.getLevel();
       var fOutput = map(f10 + f11, 0, 50, minF, maxF);
       var volOutput = map(vol, 0, 50, minV, maxV);
-      console.log("vol: " + vol);
+      // console.log("vol: " + vol);
 
       if (vol > 10) {
         freqArray.push(constrain(fOutput, maxF, minF));
@@ -122,7 +122,9 @@ function draw() {
 
   instructions();
 
-  console.log(state);
+  // console.log("state: " + state);
+  console.log("currentTime: " + currentTime);
+  console.log("elapsedTime: " + elapsedTime);
 
 }
 
@@ -228,7 +230,7 @@ function avgArrayValues(receivedArray, tempX, label) {
       }
     }
   }
-  console.log(label + tempArray);
+  // console.log(label + tempArray);
   return tempArray;
 }
 
