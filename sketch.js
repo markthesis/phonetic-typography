@@ -36,7 +36,6 @@ function refresh() {
   recSwitch = false;
   voiceListen = false;
   volHistory = zeroArray(16);
-  state = 0;
   size = 3;
   tracking = 12*size;
 }
@@ -60,6 +59,7 @@ function setup() {
   mic.start();
   freq.setInput(mic);
   refresh();
+  state = 0;
   frameRate(60);
 }
 
