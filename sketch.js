@@ -17,6 +17,7 @@ var avgFreqArray, avgVolArray;
 var volHistory;
 //switches
 var recSwitch, voiceListen;
+var mouseHover;
 //misc
 var state;
 var HKNova;
@@ -64,23 +65,26 @@ function setup() {
 }
 
 function draw() {
-
+  cursor(ARROW);
+  mouseHover = false;
   //reset to home after period of inactivity
   var currentTime = round((millis() - elapsedTime)/1000);
   if (currentTime > 30) {
+    refresh();
+    speechRefresh();
     state = 0;
   }
 
   push();
   if (state == 0) {
-    intro(width/2, height/2);
+    intro();
   } else if (state >= 2 && state <= 3) {
     background(0, 0, 0);
 
     if (voiceListen) {
       if (talk.resultValue==true && !recSwitch) {
         sentence = talk.resultString;
-        // console.log(sentence);
+        console.log(sentence);
         if (state == 2) {
           state++;
         }
@@ -104,8 +108,8 @@ function draw() {
       if (vol > 10) {
         freqArray.push(constrain(fOutput, maxF, minF));
         volArray.push(constrain(volOutput, minV, maxV));
-        // console.log(freqArray);
-        // console.log(volArray);
+        console.log(freqArray);
+        console.log(volArray);
       }
 
       volHistory.push(constrain(volOutput, 0, maxV));
@@ -123,37 +127,63 @@ function draw() {
   instructions();
 
   // console.log("state: " + state);
-  console.log("currentTime: " + currentTime);
-  console.log("elapsedTime: " + elapsedTime);
 
 }
 
+function textStyling() {
+
+  //if current x position is greater than the longest line, use xPos value
+  if (xPos >= xBreak) {
+    translate(xPos/-2, 35*size - ((3/4)*yPos));
+  } else {
+    translate(xBreak/-2, 35*size - ((3/4)*yPos));
+  }
+
+  //resets all code to 0 at start of draw cycle
+  xPos = 0;
+  yPos = 0;
+  xBreak = 0;
+
+  fill(0, 0, 100);
+  noStroke();
+}
+
 function endResult() {
+  push();
   background(0, 0, 0);
+  translate(windowWidth/2, windowHeight/2);
+  var spaceTest = 0;
+  if (sentence.length > 20) {
+    scale(0.8);
+  }
   textStyling();
+
   avgFreqArray = avgArrayValues(freqArray, sentence.length, "freq: ");
   avgVolArray = avgArrayValues(volArray, sentence.length, "vol: ");
   for (var i = 0; i < sentence.length; i++) {
     variableType(sentence.substring(i, i + 1), avgFreqArray[i], avgVolArray[i]);
-    if (xPos > (2/3)*windowWidth + 2.5*tracking) {
+    if (i > 10 && spaceTest < 1 && sentence.substring(i, i + 1) == " ") {
+      spaceTest ++;
       xBreak = xPos;
-      yPos += 65*size;
+      yPos += 70*size;
       xPos = 0;
     }
   }
+  pop();
 }
 
 function mousePressed() {
   elapsedTime = millis();
-
-  if (state >= 0 && state < 2) {
-    state ++;
-  } else if (state >= 3 && state < 4){
-    state ++;
-  } else {
-    refresh();
-    speechRefresh();
-    state = 2;
+  if (mouseHover == true) {
+    if (state >= 0 && state < 2) {
+      state ++;
+    } else if (state >= 3 && state < 4){
+      state ++;
+    } else {
+      refresh();
+      speechRefresh();
+      state = 2;
+    }
   }
 
 }
@@ -179,25 +209,6 @@ function keyPressed() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-}
-
-function textStyling() {
-
-  //if current x position is greater than the longest line, use xPos value
-  if (xPos >= xBreak) {
-    translate(width/2 - (xPos/2), windowHeight/2 + 35*size - ((3/4)*yPos));
-  } else {
-    translate(width/2 - (xBreak/2), windowHeight/2 + 35*size - ((3/4)*yPos));
-  }
-
-  //resets all code to 0 at start of draw cycle
-  xPos = 0;
-  yPos = 0;
-  xBreak = 0;
-
-  fill(0, 0, 100);
-  noStroke();
-
 }
 
 function avgArrayValues(receivedArray, tempX, label) {
@@ -230,7 +241,7 @@ function avgArrayValues(receivedArray, tempX, label) {
       }
     }
   }
-  // console.log(label + tempArray);
+  console.log(label + tempArray);
   return tempArray;
 }
 
