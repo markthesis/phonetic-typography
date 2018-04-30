@@ -1,13 +1,15 @@
-function intro(tempX, tempY) {
+function intro() {
   push();
-  translate(tempX, tempY);
+
+  translate(width/2, height/2);
+
   background(0, 0, 0);
   noStroke();
   //subtitle
   push();
   textSize(9);
   fill(0, 0, 40);
-  text("V E R S I O N    1 . 0", 0, height/-4 - 15);
+  text("V E R S I O N    1 . 1", 0, height/-4 - 15);
   fill(0, 0, 100);
   text("U S E   I N   F U L L S C R E E N    F O R    B E S T    R E S U L T S", 0, height/-4);
   UIbutton("C L I C K   T O   B E G I N", 190, 0, height/4);
@@ -57,7 +59,12 @@ function intro(tempX, tempY) {
 
 function UIbutton(words, buttonWidth, tempX, tempY) {
   push();
+  if (mouseX > width/2 - buttonWidth/2 && mouseX < width/2 + buttonWidth/2 && mouseY > height/2 + tempY - 15 && mouseY < height/2 + tempY + 15) {
+    cursor(HAND);
+    mouseHover = true;
+  }
   translate(tempX, tempY);
+
   fill(0, 0, 100);
   rect(0, 0, buttonWidth, 30, 30);
   fill(0, 0, 0);
