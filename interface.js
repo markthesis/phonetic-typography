@@ -9,7 +9,7 @@ function intro() {
   push();
   textSize(9);
   fill(0, 0, 40);
-  text("V E R S I O N    1 . 1", 0, height/-4 - 15);
+  text("V E R S I O N    1 . 2", 0, height/-4 - 15);
   fill(0, 0, 100);
   text("U S E   I N   F U L L S C R E E N    F O R    B E S T    R E S U L T S", 0, height/-4);
   UIbutton("C L I C K   T O   B E G I N", 190, 0, height/4);
@@ -64,7 +64,6 @@ function UIbutton(words, buttonWidth, tempX, tempY) {
     mouseHover = true;
   }
   translate(tempX, tempY);
-
   fill(0, 0, 100);
   rect(0, 0, buttonWidth, 30, 30);
   fill(0, 0, 0);
@@ -78,17 +77,6 @@ function arrow(tempX, tempY, tempSize) {
   push();
   translate(tempX, tempY);
   triangle(0, 0, -2*tempSize, tempSize, -2*tempSize, -1*tempSize);
-  pop();
-}
-
-function checkmark(tempX, tempY) {
-  push();
-  translate(tempX, tempY);
-  rectMode(CORNER);
-  stroke(0, 0, 100);
-  strokeWeight(8);
-  line(-75, 0, -25, 50);
-  line(-25, 50, 75, -50);
   pop();
 }
 
@@ -114,7 +102,7 @@ function instructions() {
     pop();
   } else if (state == 2) {
     textSize(h1);
-    text("B E G I N    S P E E C H    T O    T Y P E    C O N V E R S I O N", 0, height/-4);
+    text("C O N V E R T    Y O U R    S P E E C H    T O    T Y P E", 0, height/-4);
     textSize(body);
     text("Hit the spacebar to start and stop recording.", 0, height/4);
     push();
@@ -124,23 +112,13 @@ function instructions() {
     pop();
     volFeedback(0, 0);
   } else if (state == 3) {
-    textSize(h1);
-    text("S P E E C H    P R O C E S S E D", 0, height/-4);
-    push();
-    noFill();
-    stroke(0, 0, 100);
-    rect(0, -height/100, 560 - 1400*30/width, height/2.5, height/50);
-    checkmark(0, 0);
-    UIbutton("C L I C K   T O   C O N T I N U E", 230, 0, height/4);
-    pop();
-  } else if (state == 4) {
     UIbutton("C L I C K   T O   T R Y   A G A I N", 240, 0, height/4);
   }
 
   pop();
   textSize(9);
   fill(0, 0, 100);
-  if (state == 4) {
+  if (state == 3) {
     text("P R E S S    '2'    T O    S A V E    Y O U R    R E S U L T", width/2, height - 60);
   }
 
