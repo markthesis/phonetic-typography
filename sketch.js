@@ -78,7 +78,7 @@ function draw() {
   push();
   if (state == 0) {
     intro();
-  } else if (state >= 2 && state <= 3) {
+  } else if (state == 2) {
     background(0, 0, 0);
 
     if (voiceListen) {
@@ -117,9 +117,17 @@ function draw() {
         volHistory.splice(0, 1);
       }
 
+      if (vol > 10) {
+        elapsedTime = millis();
+      }
+
+      if (currentTime > 1) {
+        recSwitch = false;
+      }
+
     }
 
-  } else if (state == 4) {
+  } else if (state == 3) {
     endResult();
   }
   pop();
@@ -177,7 +185,7 @@ function mousePressed() {
   if (mouseHover == true) {
     if (state >= 0 && state < 2) {
       state ++;
-    } else if (state >= 3 && state < 4){
+    } else if (state >= 2 && state < 3){
       state ++;
     } else {
       refresh();
@@ -196,7 +204,7 @@ function keyPressed() {
     recSwitch = !recSwitch;
   } else if (state == 2 && key == ' ' && recSwitch) {
     recSwitch = !recSwitch;
-  } else if (state == 4 && key == '2') {
+  } else if (state == 3 && key == '2') {
     endResult();
     save('phonetictype.png')
   } else if (key == '0') {
