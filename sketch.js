@@ -106,7 +106,7 @@ function draw() {
       var volOutput = map(vol, 0, 50, minV, maxV);
       // console.log("vol: " + vol);
 
-      if (vol > 10) {
+      if (vol > 7) {
         freqArray.push(constrain(fOutput, maxF, minF));
         volArray.push(constrain(volOutput, minV, maxV));
         console.log(freqArray);
@@ -118,7 +118,7 @@ function draw() {
         volHistory.splice(0, 1);
       }
 
-      if (vol > 10) {
+      if (vol > 7) {
         elapsedTime = millis();
       }
 
