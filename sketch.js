@@ -208,6 +208,10 @@ function keyPressed() {
   } else if (state == 3 && key == '2') {
     endResult();
     save('phonetictype.png')
+  } else if (state == 3 && key == ' ') {
+    refresh();
+    speechRefresh();
+    state = 2;
   } else if (key == '0') {
     speechRefresh();
   } else if (key == '1') {
