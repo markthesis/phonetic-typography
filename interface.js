@@ -9,7 +9,7 @@ function intro() {
   push();
   textSize(9);
   fill(0, 0, 40);
-  text("V E R S I O N    1 . 2", 0, height/-4 - 15);
+  text("V E R S I O N    1 . 3", 0, height/-4 - 15);
   fill(0, 0, 100);
   text("U S E   I N   F U L L S C R E E N    F O R    B E S T    R E S U L T S", 0, height/-4);
   UIbutton("C L I C K   T O   B E G I N", 190, 0, height/4);
