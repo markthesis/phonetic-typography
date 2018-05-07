@@ -102,9 +102,9 @@ function instructions() {
     pop();
   } else if (state == 2) {
     textSize(h1);
-    text("C O N V E R T    Y O U R    S P E E C H    T O    T Y P E", 0, height/-4);
+    text("R E C O R D    A    S H O R T    P H R A S E", 0, height/-4);
     textSize(body);
-    text("Hit the spacebar to start and stop recording.", 0, height/4);
+    text("Speak into the microphone and\nhit the spacebar to start and stop recording.", 0, height/4);
     push();
     noFill();
     stroke(0, 0, 100);
