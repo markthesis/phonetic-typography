@@ -69,9 +69,10 @@ function draw() {
   mouseHover = false;
   //reset to home after period of inactivity
   var currentTime = round((millis() - elapsedTime)/1000);
-  if (currentTime > 30) {
+  if (currentTime == 30) {
     refresh();
     speechRefresh();
+    elapsedTime = millis();
     state = 0;
   }
 
