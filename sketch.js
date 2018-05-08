@@ -221,7 +221,7 @@ function keyPressed() {
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight - 3);
+  resizeCanvas(windowWidth, windowHeight - 5);
 }
 
 function avgArrayValues(receivedArray, tempX, label) {
