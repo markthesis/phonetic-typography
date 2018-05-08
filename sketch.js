@@ -32,10 +32,6 @@ function preload() {
 }
 
 function refresh() {
-  mic = new p5.AudioIn();
-  freq = new p5.FFT(0.2, 16);
-  mic.start();
-  freq.setInput(mic);
   currentTime = 0;
   recSwitch = false;
   voiceListen = false;
@@ -58,7 +54,10 @@ function setup() {
   rectMode(CENTER)
   textAlign(CENTER);
   textFont(HKNova);
-  
+  mic = new p5.AudioIn();
+  freq = new p5.FFT(0.2, 16);
+  mic.start();
+  freq.setInput(mic);
   refresh();
   state = 0;
   elapsedTime = 0;
