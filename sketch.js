@@ -48,7 +48,7 @@ function speechRefresh() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight - 1);
+  createCanvas(windowWidth, windowHeight - 10);
   colorMode(HSB, 360, 100, 100);
   angleMode(DEGREES);
   rectMode(CENTER)
