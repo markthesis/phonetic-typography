@@ -48,7 +48,7 @@ function speechRefresh() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight - 10);
+  createCanvas(windowWidth, windowHeight);
   colorMode(HSB, 360, 100, 100);
   angleMode(DEGREES);
   rectMode(CENTER)
@@ -221,7 +221,7 @@ function keyPressed() {
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+  resizeCanvas(windowWidth, windowHeight - 10);
 }
 
 function avgArrayValues(receivedArray, tempX, label) {
