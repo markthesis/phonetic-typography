@@ -65,6 +65,9 @@ function setup() {
 }
 
 function draw() {
+  if (getAudioContext().state !== 'running') {
+    getAudioContext().resume();
+  }
   cursor(ARROW);
   mouseHover = false;
   //reset to home after period of inactivity
